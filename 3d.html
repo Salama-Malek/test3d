@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Digital Universe Portfolio | Explore My Skills</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.4/howler.min.js"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600&display=swap');
     
@@ -157,7 +158,7 @@
         inset 0 0 30px rgba(255, 0, 255, 0.1);
       backdrop-filter: blur(15px);
       transform-style: preserve-3d;
-      transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: transform 0.2s ease, box-shadow 0.3s ease, border-color 0.3s ease;
       cursor: pointer;
       overflow: hidden;
     }
@@ -178,23 +179,23 @@
     }
 
     .card:hover {
-      transform: scale(1.05) rotateY(0deg);
-      box-shadow: 
+      box-shadow:
         0 0 50px rgba(0, 255, 255, 0.5),
         inset 0 0 50px rgba(255, 0, 255, 0.2);
       border-color: rgba(255, 255, 0, 0.5);
     }
 
-    .card.flipped {
+    .card.flipped .card-inner {
       transform: rotateY(180deg);
     }
 
-    .card-inner {
-      width: 100%;
-      height: 100%;
-      position: relative;
-      transform-style: preserve-3d;
-    }
+      .card-inner {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        transform-style: preserve-3d;
+        transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      }
 
     .card-front,
     .card-back {
@@ -362,22 +363,43 @@
       animation: float 6s infinite linear;
     }
 
-    @keyframes float {
-      0% {
-        transform: translateY(100vh) rotate(0deg);
-        opacity: 0;
-      }
+      @keyframes float {
+        0% {
+          transform: translateY(100vh) rotate(0deg);
+          opacity: 0;
+        }
       10% {
         opacity: 1;
       }
       90% {
         opacity: 1;
       }
-      100% {
-        transform: translateY(-100px) rotate(360deg);
-        opacity: 0;
+        100% {
+          transform: translateY(-100px) rotate(360deg);
+          opacity: 0;
+        }
       }
-    }
+
+      /* Cursor Trail */
+      .trail {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 12px;
+        height: 12px;
+        pointer-events: none;
+        background: radial-gradient(circle, rgba(0,255,255,0.8) 0%, rgba(255,0,255,0.8) 60%, transparent 80%);
+        border-radius: 50%;
+        filter: blur(2px);
+        transform: translate(-50%, -50%);
+        animation: trail-fade 0.6s linear forwards;
+        z-index: 1000;
+      }
+
+      @keyframes trail-fade {
+        from { opacity: 1; }
+        to { opacity: 0; }
+      }
 
     /* Responsive Design */
     @media (max-width: 768px) {
@@ -493,8 +515,12 @@
       }, 2000);
     });
 
-    const carousel = document.getElementById('carousel');
-    const particlesContainer = document.getElementById('particles');
+  const carousel = document.getElementById('carousel');
+  const particlesContainer = document.getElementById('particles');
+  const flipSound = new Howl({
+    src: ['https://assets.mixkit.co/sfx/download/mixkit-quick-positive-video-game-notification-256.wav'],
+    volume: 0.2
+  });
     
     // Enhanced portfolio data with comprehensive software skills and preview hints
     const cardsData = [
@@ -623,7 +649,9 @@
       cardsData.forEach((data, i) => {
         const card = document.createElement('div');
         card.className = 'card';
-        card.style.transform = `rotateY(${i * angle}deg) translateZ(600px)`;
+        const baseTransform = `rotateY(${i * angle}deg) translateZ(600px)`;
+        card.style.transform = baseTransform;
+        card.dataset.baseTransform = baseTransform;
 
         const inner = document.createElement('div');
         inner.className = 'card-inner';
@@ -654,9 +682,13 @@
         inner.appendChild(back);
         card.appendChild(inner);
 
-        card.addEventListener('click', () => {
+        card.addEventListener('dblclick', () => {
           card.classList.toggle('flipped');
+          flipSound.play();
         });
+
+        card.addEventListener('mousemove', handleCardParallax);
+        card.addEventListener('mouseleave', resetCardParallax);
 
         carousel.appendChild(card);
       });
@@ -671,6 +703,33 @@
         particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
         particlesContainer.appendChild(particle);
       }
+    }
+
+    function handleCardParallax(e) {
+      const card = e.currentTarget;
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      const rotateX = ((y - centerY) / centerY) * -10;
+      const rotateY = ((x - centerX) / centerX) * 10;
+      const base = card.dataset.baseTransform || '';
+      card.style.transform = `${base} scale(1.05) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+    }
+
+    function resetCardParallax(e) {
+      const card = e.currentTarget;
+      card.style.transform = card.dataset.baseTransform;
+    }
+
+    function createTrail(e) {
+      const trail = document.createElement('span');
+      trail.className = 'trail';
+      trail.style.left = e.clientX + 'px';
+      trail.style.top = e.clientY + 'px';
+      document.body.appendChild(trail);
+      trail.addEventListener('animationend', () => trail.remove());
     }
 
     function addEventListeners() {
@@ -750,9 +809,11 @@
       const mouseY = e.clientY / window.innerHeight;
       
       // Subtle parallax effect on nebula
-      const nebula = document.querySelector('.nebula');
-      nebula.style.transform = `translate(${mouseX * 20}px, ${mouseY * 20}px)`;
-    });
+    const nebula = document.querySelector('.nebula');
+    nebula.style.transform = `translate(${mouseX * 20}px, ${mouseY * 20}px)`;
+
+    createTrail(e);
+  });
   </script>
 </body>
 </html>

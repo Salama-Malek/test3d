@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Digital Universe Portfolio | Explore My Skills</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600&display=swap');
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+
+    body {
+      background: radial-gradient(ellipse at center, #0a0a2a 0%, #1a0033 50%, #000011 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+      font-family: 'Rajdhani', sans-serif;
+      position: relative;
+    }
+
+    /* Cosmic Background Animation */
+    .cosmic-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -2;
+    }
+
+    .stars {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        radial-gradient(2px 2px at 20px 30px, #eee, transparent),
+        radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.8), transparent),
+        radial-gradient(1px 1px at 90px 40px, #fff, transparent),
+        radial-gradient(1px 1px at 130px 80px, rgba(255,255,255,0.6), transparent),
+        radial-gradient(2px 2px at 160px 30px, #ddd, transparent);
+      background-repeat: repeat;
+      background-size: 200px 100px;
+      animation: twinkle 4s ease-in-out infinite;
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.8; }
+      50% { opacity: 1; }
+    }
+
+    /* Nebula Effect */
+    .nebula {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: 
+        radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 40% 80%, rgba(120, 219, 255, 0.3) 0%, transparent 50%);
+      animation: nebula-drift 20s ease-in-out infinite;
+    }
+
+    @keyframes nebula-drift {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33% { transform: translate(-20px, -10px) scale(1.1); }
+      66% { transform: translate(10px, 20px) scale(0.9); }
+    }
+
+    /* Main Container */
+    .universe-container {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Header */
+    .portfolio-header {
+      position: absolute;
+      top: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+      z-index: 10;
+    }
+
+    .portfolio-title {
+      font-family: 'Orbitron', monospace;
+      font-size: 2.5rem;
+      font-weight: 900;
+      background: linear-gradient(45deg, #00ffff, #ff00ff, #ffff00);
+      background-size: 200% 200%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: gradient-shift 3s ease-in-out infinite;
+      margin-bottom: 0.5rem;
+      text-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+    }
+
+    @keyframes gradient-shift {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    .portfolio-subtitle {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 1.2rem;
+      color: #a0a0ff;
+      opacity: 0.8;
+      letter-spacing: 2px;
+    }
+
+    /* Carousel Container */
+    .carousel {
+      width: 500px;
+      height: 600px;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: grab;
+    }
+
+    .carousel:active {
+      cursor: grabbing;
+    }
+
+    /* Holographic Cards */
+    .card {
+      position: absolute;
+      width: 300px;
+      height: 400px;
+      top: 100px;
+      left: 100px;
+      background: linear-gradient(135deg, 
+        rgba(0, 255, 255, 0.1) 0%, 
+        rgba(255, 0, 255, 0.1) 50%, 
+        rgba(255, 255, 0, 0.1) 100%);
+      color: white;
+      border-radius: 20px;
+      border: 2px solid rgba(0, 255, 255, 0.3);
+      box-shadow: 
+        0 0 30px rgba(0, 255, 255, 0.3),
+        inset 0 0 30px rgba(255, 0, 255, 0.1);
+      backdrop-filter: blur(15px);
+      transform-style: preserve-3d;
+      transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: pointer;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s;
+    }
+
+    .card:hover::before {
+      left: 100%;
+    }
+
+    .card:hover {
+      transform: scale(1.05) rotateY(0deg);
+      box-shadow: 
+        0 0 50px rgba(0, 255, 255, 0.5),
+        inset 0 0 50px rgba(255, 0, 255, 0.2);
+      border-color: rgba(255, 255, 0, 0.5);
+    }
+
+    .card.flipped {
+      transform: rotateY(180deg);
+    }
+
+    .card-inner {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+    }
+
+    .card-front,
+    .card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      padding: 30px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .card-back {
+      transform: rotateY(180deg);
+      background: linear-gradient(135deg, 
+        rgba(20, 20, 60, 0.9) 0%, 
+        rgba(60, 20, 80, 0.9) 100%);
+      border-radius: 18px;
+    }
+
+    .card-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      text-align: center;
+      filter: drop-shadow(0 0 10px rgba(0, 255, 255, 0.5));
+    }
+
+    .card-title {
+      font-family: 'Orbitron', monospace;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #00ffff;
+      margin-bottom: 1rem;
+      text-align: center;
+      text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+    }
+
+    .card-subtitle {
+      font-size: 1rem;
+      color: #a0a0ff;
+      margin-bottom: 1rem;
+      text-align: center;
+      opacity: 0.9;
+    }
+
+    .card-description {
+      font-size: 0.9rem;
+      line-height: 1.5;
+      color: #e0e0ff;
+      text-align: center;
+      opacity: 0.8;
+    }
+
+    .card-back .card-description {
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: #ffffff;
+      opacity: 0.9;
+      text-align: center;
+      padding: 0 15px;
+    }
+
+    /* Preview hint on front */
+    .card-preview {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.3);
+      opacity: 0.1;
+      text-align: center;
+      font-style: italic;
+      transition: opacity 0.3s ease;
+    }
+
+    .card:hover .card-preview {
+      opacity: 0.4;
+    }
+
+    /* Enhanced back content */
+    .skill-list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 15px;
+    }
+
+    .skill-tag {
+      background: rgba(0, 255, 255, 0.2);
+      border: 1px solid rgba(0, 255, 255, 0.3);
+      border-radius: 15px;
+      padding: 4px 12px;
+      font-size: 0.75rem;
+      color: #00ffff;
+      backdrop-filter: blur(5px);
+    }
+
+    .flip-indicator {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      font-size: 1.2rem;
+      opacity: 0.6;
+      animation: pulse-glow 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse-glow {
+      0%, 100% { opacity: 0.3; transform: scale(1); }
+      50% { opacity: 0.8; transform: scale(1.1); }
+    }
+
+    /* Navigation Controls */
+    .navigation-controls {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 2rem;
+      z-index: 10;
+    }
+
+    .nav-btn {
+      background: linear-gradient(45deg, rgba(0, 255, 255, 0.2), rgba(255, 0, 255, 0.2));
+      border: 2px solid rgba(0, 255, 255, 0.3);
+      border-radius: 50px;
+      padding: 12px 24px;
+      color: #00ffff;
+      font-family: 'Orbitron', monospace;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+    }
+
+    .nav-btn:hover {
+      background: linear-gradient(45deg, rgba(0, 255, 255, 0.3), rgba(255, 0, 255, 0.3));
+      border-color: rgba(255, 255, 0, 0.5);
+      box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+      transform: translateY(-2px);
+    }
+
+    /* Particle Effects */
+    .particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .particle {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: #00ffff;
+      border-radius: 50%;
+      animation: float 6s infinite linear;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(100vh) rotate(0deg);
+        opacity: 0;
+      }
+      10% {
+        opacity: 1;
+      }
+      90% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-100px) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .portfolio-title {
+        font-size: 2rem;
+      }
+      
+      .carousel {
+        width: 350px;
+        height: 450px;
+      }
+      
+      .card {
+        width: 250px;
+        height: 320px;
+        top: 65px;
+        left: 50px;
+      }
+      
+      .card-back .card-description {
+        font-size: 0.75rem;
+        line-height: 1.4;
+      }
+      
+      .skill-tag {
+        font-size: 0.65rem;
+        padding: 3px 8px;
+      }
+      
+      .navigation-controls {
+        gap: 1rem;
+      }
+      
+      .nav-btn {
+        padding: 10px 20px;
+        font-size: 0.8rem;
+      }
+    }
+
+    /* Loading Animation */
+    .loading {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #000011;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      transition: opacity 0.5s ease-out;
+    }
+
+    .loading.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .loading-text {
+      font-family: 'Orbitron', monospace;
+      font-size: 1.5rem;
+      color: #00ffff;
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.5; }
+      50% { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Loading Screen -->
+  <div class="loading" id="loading">
+    <div class="loading-text">INITIALIZING DIGITAL UNIVERSE...</div>
+  </div>
+
+  <!-- Cosmic Background -->
+  <div class="cosmic-bg">
+    <div class="stars"></div>
+    <div class="nebula"></div>
+  </div>
+
+  <!-- Particle Effects -->
+  <div class="particles" id="particles"></div>
+
+  <!-- Main Container -->
+  <div class="universe-container">
+    <!-- Header -->
+    <div class="portfolio-header">
+      <h1 class="portfolio-title">DIGITAL UNIVERSE</h1>
+      <p class="portfolio-subtitle">EXPLORE MY SKILLS & PROJECTS</p>
+    </div>
+
+    <!-- 3D Carousel -->
+    <div class="carousel" id="carousel"></div>
+
+    <!-- Navigation Controls -->
+    <div class="navigation-controls">
+      <button class="nav-btn" onclick="autoRotate()">AUTO ROTATE</button>
+      <button class="nav-btn" onclick="resetRotation()">RESET</button>
+      <button class="nav-btn" onclick="toggleParticles()">PARTICLES</button>
+    </div>
+  </div>
+
+  <script>
+    // Initialize after page load
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        document.getElementById('loading').classList.add('hidden');
+        initializeUniverse();
+      }, 2000);
+    });
+
+    const carousel = document.getElementById('carousel');
+    const particlesContainer = document.getElementById('particles');
+    
+    // Enhanced portfolio data with comprehensive software skills and preview hints
+    const cardsData = [
+      {
+        icon: '🚀',
+        title: 'FRONTEND GALAXY',
+        subtitle: 'React • Next.js • TypeScript',
+        description: 'Building responsive, modern web experiences',
+        preview: 'Click to explore React ecosystem, TypeScript, and modern UI frameworks',
+        skills: ['React', 'Next.js', 'TypeScript', 'Redux', 'Tailwind CSS', 'Material-UI', 'Styled Components', 'HTML5', 'CSS3', 'JavaScript ES6+'],
+        back: 'Expert in modern frontend development with focus on React ecosystem, Next.js for SEO optimization, TypeScript for type safety, and responsive design principles.'
+      },
+      {
+        icon: '⚡',
+        title: 'BACKEND NEBULA',
+        subtitle: 'Node.js • Express • MongoDB',
+        description: 'Powering applications with robust APIs',
+        preview: 'Click to discover server-side technologies and database solutions',
+        skills: ['Node.js', 'Express.js', 'MongoDB', 'PostgreSQL', 'MySQL', 'REST APIs', 'GraphQL', 'JWT', 'bcrypt', 'Mongoose', 'Sequelize'],
+        back: 'Proficient in building scalable backend systems with RESTful APIs, database design, authentication, and microservices architecture.'
+      },
+      {
+        icon: '🎨',
+        title: 'DESIGN COSMOS',
+        subtitle: 'Figma • Adobe Suite • UI/UX',
+        description: 'Creating intuitive user experiences',
+        preview: 'Click to explore design tools and user experience principles',
+        skills: ['Figma', 'Adobe Photoshop', 'Illustrator', 'XD', 'Canva', 'Wireframing', 'Prototyping', 'Design Systems', 'User Research', 'Accessibility'],
+        back: 'Skilled in creating user-centered interfaces with modern design principles, wireframing, prototyping, and accessibility design.'
+      },
+      {
+        icon: '💻',
+        title: 'PROGRAMMING LANGUAGES',
+        subtitle: 'JavaScript • Python • Java',
+        description: 'Multi-language development expertise',
+        preview: 'Click to see programming languages and paradigms',
+        skills: ['JavaScript', 'Python', 'Java', 'C++', 'TypeScript', 'PHP', 'Ruby', 'Go', 'HTML5', 'CSS3', 'SQL'],
+        back: 'Versatile developer with experience in multiple programming languages and paradigms including functional and object-oriented programming.'
+      },
+      {
+        icon: '☁️',
+        title: 'CLOUD & DEVOPS',
+        subtitle: 'AWS • Docker • CI/CD',
+        description: 'Deploying and scaling applications',
+        preview: 'Click to explore cloud platforms and deployment strategies',
+        skills: ['AWS', 'Docker', 'Kubernetes', 'CI/CD', 'GitHub Actions', 'Jenkins', 'Heroku', 'Vercel', 'Netlify', 'Cloud Architecture'],
+        back: 'Experienced in cloud deployment, containerization, CI/CD pipelines, and scalable cloud architecture design.'
+      },
+      {
+        icon: '📱',
+        title: 'MOBILE DEVELOPMENT',
+        subtitle: 'React Native • Flutter • PWA',
+        description: 'Cross-platform mobile solutions',
+        preview: 'Click to discover mobile development frameworks and PWA',
+        skills: ['React Native', 'Flutter', 'PWA', 'Mobile Design', 'App Store', 'Mobile Testing', 'Native Development'],
+        back: 'Specialized in cross-platform mobile development with React Native, Flutter, and Progressive Web Apps.'
+      },
+      {
+        icon: '🔧',
+        title: 'TOOLS & TECHNOLOGIES',
+        subtitle: 'Git • VS Code • Webpack',
+        description: 'Essential development toolkit',
+        preview: 'Click to explore development tools and workflow optimization',
+        skills: ['Git', 'GitHub', 'VS Code', 'Webpack', 'Babel', 'ESLint', 'Prettier', 'Postman', 'Chrome DevTools', 'npm', 'yarn'],
+        back: 'Proficient with essential development tools, package management, and workflow optimization techniques.'
+      },
+      {
+        icon: '📊',
+        title: 'DATABASES & ANALYTICS',
+        subtitle: 'SQL • NoSQL • Data Analysis',
+        description: 'Data management and insights',
+        preview: 'Click to explore database technologies and data analysis',
+        skills: ['MongoDB', 'PostgreSQL', 'MySQL', 'Redis', 'Firebase', 'Data Modeling', 'SQL', 'Data Analysis', 'Performance Optimization'],
+        back: 'Expert in database design, data modeling, SQL queries, and performance optimization for both SQL and NoSQL databases.'
+      },
+      {
+        icon: '🔒',
+        title: 'SECURITY & TESTING',
+        subtitle: 'Jest • Cypress • Security',
+        description: 'Building secure, tested applications',
+        preview: 'Click to discover testing frameworks and security practices',
+        skills: ['Jest', 'Cypress', 'Mocha', 'Chai', 'Unit Testing', 'E2E Testing', 'OWASP', 'Input Validation', 'Security Best Practices'],
+        back: 'Comprehensive testing experience with unit, integration, and E2E testing, plus security best practices implementation.'
+      },
+      {
+        icon: '🌐',
+        title: 'WEB TECHNOLOGIES',
+        subtitle: 'HTTP • APIs • Performance',
+        description: 'Modern web development stack',
+        preview: 'Click to explore web protocols and performance optimization',
+        skills: ['HTTP/HTTPS', 'REST APIs', 'GraphQL', 'WebSockets', 'Service Workers', 'Web APIs', 'Performance', 'SEO', 'Accessibility'],
+        back: 'Deep understanding of web protocols, API design, performance optimization, SEO, and accessibility standards.'
+      },
+      {
+        icon: '🤖',
+        title: 'AI & AUTOMATION',
+        subtitle: 'Machine Learning • APIs',
+        description: 'Intelligent application features',
+        preview: 'Click to explore AI integration and automation solutions',
+        skills: ['OpenAI API', 'TensorFlow', 'scikit-learn', 'NLP', 'Computer Vision', 'Automation Scripts', 'AI Integration'],
+        back: 'Experience integrating AI and machine learning solutions into web applications with automation and intelligent features.'
+      },
+      {
+        icon: '📈',
+        title: 'ANALYTICS & SEO',
+        subtitle: 'Google Analytics • SEO',
+        description: 'Data-driven optimization',
+        preview: 'Click to explore analytics tools and SEO strategies',
+        skills: ['Google Analytics', 'Search Console', 'SEO', 'Keyword Research', 'Performance Monitoring', 'A/B Testing', 'Conversion Optimization'],
+        back: 'Expert in data-driven optimization using analytics tools, SEO strategies, and conversion rate optimization.'
+      }
+    ];
+
+    let rotationY = 0;
+    let autoRotateInterval = null;
+    let particlesEnabled = true;
+    const angle = 360 / cardsData.length;
+
+    function initializeUniverse() {
+      createCards();
+      createParticles();
+      addEventListeners();
+    }
+
+    function createCards() {
+      cardsData.forEach((data, i) => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.style.transform = `rotateY(${i * angle}deg) translateZ(600px)`;
+
+        const inner = document.createElement('div');
+        inner.className = 'card-inner';
+
+        const front = document.createElement('div');
+        front.className = 'card-front';
+        front.innerHTML = `
+          <div class="flip-indicator">🔄</div>
+          <div class="card-icon">${data.icon}</div>
+          <h3 class="card-title">${data.title}</h3>
+          <p class="card-subtitle">${data.subtitle}</p>
+          <p class="card-description">${data.description}</p>
+          <div class="card-preview">${data.preview}</div>
+        `;
+
+        const back = document.createElement('div');
+        back.className = 'card-back';
+        back.innerHTML = `
+          <div class="flip-indicator">🔄</div>
+          <h3 class="card-title">${data.title}</h3>
+          <p class="card-description">${data.back}</p>
+          <div class="skill-list">
+            ${data.skills.map(skill => `<span class="skill-tag">${skill}</span>`).join('')}
+          </div>
+        `;
+
+        inner.appendChild(front);
+        inner.appendChild(back);
+        card.appendChild(inner);
+
+        card.addEventListener('click', () => {
+          card.classList.toggle('flipped');
+        });
+
+        carousel.appendChild(card);
+      });
+    }
+
+    function createParticles() {
+      for (let i = 0; i < 50; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.animationDelay = Math.random() * 6 + 's';
+        particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
+        particlesContainer.appendChild(particle);
+      }
+    }
+
+    function addEventListeners() {
+      let isDragging = false;
+      let startX;
+      let startRotationY;
+
+      document.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        startX = e.clientX;
+        startRotationY = rotationY;
+        carousel.style.cursor = 'grabbing';
+      });
+
+      document.addEventListener('mouseup', () => {
+        isDragging = false;
+        carousel.style.cursor = 'grab';
+      });
+
+      document.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        const delta = e.clientX - startX;
+        rotationY = startRotationY + delta * 0.5;
+        carousel.style.transform = `rotateY(${rotationY}deg)`;
+      });
+
+      // Touch events for mobile
+      document.addEventListener('touchstart', (e) => {
+        isDragging = true;
+        startX = e.touches[0].clientX;
+        startRotationY = rotationY;
+      });
+
+      document.addEventListener('touchend', () => {
+        isDragging = false;
+      });
+
+      document.addEventListener('touchmove', (e) => {
+        if (!isDragging) return;
+        e.preventDefault();
+        const delta = e.touches[0].clientX - startX;
+        rotationY = startRotationY + delta * 0.5;
+        carousel.style.transform = `rotateY(${rotationY}deg)`;
+      });
+    }
+
+    function autoRotate() {
+      if (autoRotateInterval) {
+        clearInterval(autoRotateInterval);
+        autoRotateInterval = null;
+        return;
+      }
+      
+      autoRotateInterval = setInterval(() => {
+        rotationY += 1;
+        carousel.style.transform = `rotateY(${rotationY}deg)`;
+      }, 50);
+    }
+
+    function resetRotation() {
+      rotationY = 0;
+      carousel.style.transform = `rotateY(${rotationY}deg)`;
+      if (autoRotateInterval) {
+        clearInterval(autoRotateInterval);
+        autoRotateInterval = null;
+      }
+    }
+
+    function toggleParticles() {
+      particlesEnabled = !particlesEnabled;
+      particlesContainer.style.opacity = particlesEnabled ? '1' : '0';
+    }
+
+    // Add some interactive effects
+    document.addEventListener('mousemove', (e) => {
+      const mouseX = e.clientX / window.innerWidth;
+      const mouseY = e.clientY / window.innerHeight;
+      
+      // Subtle parallax effect on nebula
+      const nebula = document.querySelector('.nebula');
+      nebula.style.transform = `translate(${mouseX * 20}px, ${mouseY * 20}px)`;
+    });
+  </script>
+</body>
+</html>
